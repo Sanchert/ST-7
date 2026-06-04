@@ -1,27 +1,25 @@
 package com.mycompany.app;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-public class Task2 {
+/**
+ * Задание №2: публичный IPv4 через ipify.
+ */
+public final class Task2 {
+
+    private static final String IPIFY_URL = "https://api.ipify.org/?format=json";
+
+    private Task2() {
+    }
 
     public static void getMyIP(WebDriver webDriver) {
         try {
-            webDriver.get("https://api.ipify.org/?format=json");
-
-            WebElement elem = webDriver.findElement(By.tagName("pre"));
-            String jsonStr = elem.getText();
-
-            JSONParser parser = new JSONParser();
-            JSONObject obj = (JSONObject) parser.parse(jsonStr);
-            String ip = (String) obj.get("ip");
-
+            JSONObject response = JsonPageReader.readObject(webDriver, IPIFY_URL);
+            String ip = (String) response.get("ip");
             System.out.println(ip);
         } catch (Exception e) {
-            System.out.println("Error:" + e);
+            System.out.println("[ERR] T2: " + e);
         }
     }
 }
