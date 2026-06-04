@@ -17,7 +17,7 @@ public final class Task2 {
         try {
             JSONObject response = JsonPageReader.readObject(webDriver, IPIFY_URL);
             String ip = (String) response.get("ip");
-            System.out.println(ip);
+            System.out.println("Got IPv4: " + ip);
         } catch (Exception e) {
             System.out.println("[ERR] T2: " + e);
         }
