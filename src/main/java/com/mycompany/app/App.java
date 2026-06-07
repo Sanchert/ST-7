@@ -3,38 +3,26 @@ package com.mycompany.app;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-/**
- * Точка входа: задание №1 и запуск {@link Task2}, {@link Task3}.
- */
 public class App {
 
-    private static final String PASSWORD_GENERATOR_URL =
-            "https://www.calculator.net/password-generator.html";
-    private static final String PASSWORD_SELECTOR = "#resultid div.verybigtext b";
-
     public static void main(String[] args) {
-        WebDriver webDriver = WebDriverFactory.createChromeDriver();
+        System.setProperty("webdriver.chrome.driver", "C:/tmp/chrome-win64/chromedriver-win64/chromedriver-win64/chromedriver.exe");
+        ChromeOptions options = new ChromeOptions();
+        options.setBinary("C:/tmp/chrome-win64/chrome-win64/chrome.exe");
+        WebDriver webDriver = new ChromeDriver(options);
         try {
-            printGeneratedPassword(webDriver);
-            Task2.getMyIP(webDriver);
-            Task3.getWeatherForecast(webDriver);
+            webDriver.get("https://www.calculator.net/password-generator.html");
+            WebElement passwordText = webDriver.findElement(By.cssSelector("div.verybigtext b"));
+            System.out.println("Task 1: " + passwordText.getText());
+            System.out.println("Task 2: " + Task2.getMyIP(webDriver));
+            System.out.println("Task 3: \n" + Task3.getWeatherForecast(webDriver));
         } catch (Exception e) {
-            System.out.println("[ERR] T1: " + e);
+            System.out.println("Error: " + e);
         } finally {
             webDriver.quit();
         }
-    }
-
-    private static void printGeneratedPassword(WebDriver webDriver) {
-        webDriver.get(PASSWORD_GENERATOR_URL);
-
-        WebDriverWait wait = new WebDriverWait(webDriver, DriverSettings.EXPLICIT_WAIT);
-        WebElement password = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(PASSWORD_SELECTOR)));
-
-        System.out.println("Сгенерированный пароль: " + password.getText());
     }
 }
